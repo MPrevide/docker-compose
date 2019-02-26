@@ -214,11 +214,7 @@ authConfig "backstage"
     -d @- ) <<PAYLOAD
 {
      "name": "backstage_graphql",
-<<<<<<< HEAD
      "uris": [ "/graphql(.*)"],
-=======
-     "uris": [ "/graphql"],
->>>>>>> My local config
      "strip_uri": false,
      "upstream_url": "http://backstage:3005/"
  }
