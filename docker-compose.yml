@@ -81,13 +81,13 @@ services:
       options:
         max-size: 100m
 
-  gui:
-    image: dojot/gui:latest
-    restart: always
-    logging:
-      driver: json-file
-      options:
-        max-size: 100m
+  # gui:
+  #   image: mprevide/gui:test #0.3.0-nightly20190207 #latest
+  #   restart: always
+  #   logging:
+  #     driver: json-file
+  #     options:
+  #       max-size: 100m
 
   data-broker:
     image: dojot/data-broker
@@ -196,6 +196,8 @@ services:
       driver: json-file
       options:
         max-size: 100m
+    # volumes:
+    #   - /home/mprevide/dojot/auth/auth/:/usr/src/app/auth/:Z
 
   postgres:
     image: "postgres:9.4-alpine"
@@ -283,7 +285,7 @@ services:
         max-size: 100m
 
   flowbroker:
-    image: dojot/flowbroker:latest
+    image: dojot/flowbroker:test #0.3.0-nightly20190220
     restart: always
     environment:
       DEPLOY_ENGINE: "docker"
@@ -302,6 +304,7 @@ services:
       - flowbroker
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:Z
+      - /home/mprevide/dojot/flowbroker/orchestrator/:/opt/flowbroker/orchestrator/src/:Z
 
   flowbroker-context-manager:
     image: dojot/flowbroker-context-manager:latest
@@ -364,7 +367,7 @@ services:
       - device-manager
 
   backstage:
-    image: "dojot/backstage"
+    image: "mprevide/backstage"
     restart: always
     depends_on:
       - postgres

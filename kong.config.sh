@@ -20,7 +20,7 @@ done
     "name": "gui",
     "uris": "/",
     "strip_uri": false,
-    "upstream_url": "http://gui:80"
+    "upstream_url": "http://172.22.0.1:8888"
 }
 PAYLOAD
 # no auth: serves only static front-end content
@@ -214,8 +214,24 @@ authConfig "backstage"
     -d @- ) <<PAYLOAD
 {
      "name": "backstage_graphql",
+<<<<<<< HEAD
      "uris": [ "/graphql(.*)"],
+=======
+     "uris": [ "/graphql"],
+>>>>>>> My local config
      "strip_uri": false,
      "upstream_url": "http://backstage:3005/"
  }
+PAYLOAD
+
+
+(curl -o /dev/null ${kong}/apis -s -S -X POST \
+    --header "Content-Type: application/json" \	
+    -d @- ) <<PAYLOAD	
+{	
+    "name": "mashup",	
+    "uris": ["/mashup"],	
+    "strip_uri": true,	
+    "upstream_url": "http://flowbroker:80"	
+}	
 PAYLOAD
