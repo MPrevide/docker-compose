@@ -20,7 +20,7 @@ done
     "name": "gui",
     "uris": "/",
     "strip_uri": false,
-    "upstream_url": "http://172.22.0.1:8888"
+    "upstream_url": "http://172.23.0.1:8888"
 }
 PAYLOAD
 # no auth: serves only static front-end content
