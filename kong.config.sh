@@ -20,7 +20,7 @@ done
     "name": "gui",
     "uris": "/",
     "strip_uri": false,
-    "upstream_url": "http://172.23.0.1:8888"
+    "upstream_url": "http://172.18.0.1:8888"
 }
 PAYLOAD
 # no auth: serves only static front-end content
@@ -108,8 +108,8 @@ PAYLOAD
 # rate plugin limit to avoid brute-force atacks
 curl -o /dev/null -sS -X POST ${kong}/apis/auth-service/plugins \
     --data "name=rate-limiting" \
-    --data "config.minute=5" \
-    --data "config.hour=40" \
+    --data "config.minute=5555" \
+    --data "config.hour=55555" \
     --data "config.policy=local"
 
 
@@ -156,6 +156,17 @@ authConfig "user-service"
 }
 PAYLOAD
 authConfig "flows"
+
+(curl -o /dev/null ${kong}/apis -s -S -X POST \
+    --header "Content-Type: application/json" \
+    -d @- ) <<PAYLOAD
+{
+    "name": "flowsIcons",
+    "uris": ["/flows/icons"],
+    "strip_uri": true,
+    "upstream_url": "http://flowbroker:80/icons"
+}
+PAYLOAD
 
 # History
 (curl -o /dev/null ${kong}/apis -s -S -X POST \

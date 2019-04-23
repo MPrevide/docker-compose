@@ -14,7 +14,7 @@ services:
   #     - ./certs/default.conf:/etc/nginx/conf.d/default.conf
 
   history:
-    image: matheuscampanhaf/history:latest
+    image: dojot/history:development
     restart: always
     depends_on:
       - mongodb
@@ -27,7 +27,7 @@ services:
         max-size: 100m
 
   persister:
-    image: matheuscampanhaf/persister:latest
+    image: dojot/persister:development
     restart: always
     depends_on:
       - mongodb
@@ -81,16 +81,9 @@ services:
       options:
         max-size: 100m
 
-  # gui:
-  #   image: mprevide/gui:test #0.3.0-nightly20190207 #latest
-  #   restart: always
-  #   logging:
-  #     driver: json-file
-  #     options:
-  #       max-size: 100m
 
   data-broker:
-    image: giovannicuriel/data-broker:notifications
+    image: dojot/data-broker:development
     restart: always
     depends_on:
       - kafka
@@ -120,7 +113,7 @@ services:
         max-size: 100m
 
   image-manager:
-    image: dojot/image-manager:latest
+    image: dojot/image-manager:development
     restart: always
     depends_on:
       - postgres
@@ -148,7 +141,7 @@ services:
     command: server /data
 
   device-manager:
-    image: dojot/device-manager
+    image: dojot/device-manager:development #dojot/device-manager:development
     restart: always
     environment:
       # TODO: Fill these env variables with suitable values
@@ -160,6 +153,8 @@ services:
       - kafka
       - data-broker
       - device-manager-redis
+    # volumes:
+    #   - /l/disk0/alribeiro/dojot/device-manager:/usr/src/app
     logging:
       driver: json-file
       options:
@@ -174,7 +169,7 @@ services:
         max-size: 100m
 
   auth:
-    image: dojot/auth:latest
+    image: dojot/auth:development
     restart: always
     depends_on:
       - apigw
@@ -196,8 +191,6 @@ services:
       driver: json-file
       options:
         max-size: 100m
-    # volumes:
-    #   - /home/mprevide/dojot/auth/auth/:/usr/src/app/auth/:Z
 
   postgres:
     image: "postgres:9.4-alpine"
@@ -285,7 +278,7 @@ services:
         max-size: 100m
 
   flowbroker:
-    image: mprevide/flowbroker:notification  #0.3.0-nightly20190220
+    image: dojot/flowbroker:development
     restart: always
     environment:
       DEPLOY_ENGINE: "docker"
@@ -304,7 +297,6 @@ services:
       - flowbroker
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:Z
-      - /home/mprevide/dojot/flowbroker/orchestrator/:/opt/flowbroker/orchestrator/src/:Z
 
   flowbroker-context-manager:
     image: dojot/flowbroker-context-manager:latest
@@ -352,6 +344,9 @@ services:
 
   ejbca:
     image: "dojot/ejbca-rest"
+    environment:
+      DOJOT_MANAGEMENT_USER: 'ejbca'
+      KAFKA_GROUP_ID: 'ejbca-group'
     restart: always
     logging:
       driver: json-file
@@ -360,19 +355,30 @@ services:
 
 
   data-manager:
-    image: "dojot/data-manager"
+    image: "dojot/data-manager:development"
     restart: always
     depends_on:
       - flowbroker
       - device-manager
 
   backstage:
-    image: "dojot/backstage"
+    image: "dojot/backstage:development"
     restart: always
     depends_on:
       - postgres
 
+  # cron:
+  #   image: dojot/cron
+  #   depends_on:
+  #     - kafka
+  #     - data-broker
+  #     - auth
+  #     - mongodb
+  #   ports:
+  #     - 5000:5000
+  #   restart: always
 
 networks:
   flowbroker:
     name: ${FLOWBROKER_NETWORK}
+
