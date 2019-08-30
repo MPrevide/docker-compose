@@ -1,0 +1,217 @@
+[
+    {
+        "Name": "dojot_default",
+        "Id": "74f764246dcd6c16431b1768639a7c3353b0335d0825f274d12e85fe826397c5",
+        "Created": "2019-07-19T16:03:55.658166727-03:00",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "172.22.0.0/16",
+                    "Gateway": "172.22.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": true,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {
+            "117b4f7a9fee9eeacb20a85caf22e2c505261e4f3bd444cc597ac5a4a0648d52": {
+                "Name": "dojot_postgres_1",
+                "EndpointID": "23c1578f1f15ad3f3e47e46da6bcd8cb1a45d8f3690f35f30811695dec46a998",
+                "MacAddress": "02:42:ac:16:00:03",
+                "IPv4Address": "172.22.0.3/16",
+                "IPv6Address": ""
+            },
+            "123cb84a28290b57a3506ee4491c411d91f5d66e1d315db447cddb9b46adcac4": {
+                "Name": "dojot_data-broker-redis_1",
+                "EndpointID": "03c452f5029e5fba7f1a83fa512766c3ae2cd790bb3ca501934a9d1bc65521f3",
+                "MacAddress": "02:42:ac:16:00:08",
+                "IPv4Address": "172.22.0.8/16",
+                "IPv6Address": ""
+            },
+            "1847f99aa1ec5882997bc59f54202bbf09f9cab315d2178ee6aa4131e499e33e": {
+                "Name": "dojot_auth_1",
+                "EndpointID": "ab9c269839812a442479c0ed5a3489fa83789b9fa49af607bbf5a98509fd53ef",
+                "MacAddress": "02:42:ac:16:00:15",
+                "IPv4Address": "172.22.0.21/16",
+                "IPv6Address": ""
+            },
+            "29daa74d1a7b776a8cea4a803ba1fad1ee1768859c54fb0009cf4460ed56c701": {
+                "Name": "dojot_mongodb_1",
+                "EndpointID": "a684e7a305048a650812a24c01f67b41da488b76b6da00c602a52899326379e2",
+                "MacAddress": "02:42:ac:16:00:06",
+                "IPv4Address": "172.22.0.6/16",
+                "IPv6Address": ""
+            },
+            "3aabf51a8a7838c1528ae639ad656da6e3e0476eed984f0f4e60a5b9d8f93af8": {
+                "Name": "dojot_iotagent-lwm2m_1",
+                "EndpointID": "54f0c2700028d4cbb26fd11ec2127bf6e6c973808c595e8f185a7b41e0609fc9",
+                "MacAddress": "02:42:ac:16:00:16",
+                "IPv4Address": "172.22.0.22/16",
+                "IPv6Address": ""
+            },
+            "4933a9deff1d52ae32eca6be562a8688a1ebc179ffcf3a5855e1148146ba2367": {
+                "Name": "dojot_auth-redis_1",
+                "EndpointID": "b114d8182192fca6d0dff68dfa0fea26d52493c8c0185444bff2854468b62477",
+                "MacAddress": "02:42:ac:16:00:04",
+                "IPv4Address": "172.22.0.4/16",
+                "IPv6Address": ""
+            },
+            "514a418011d1c748efe1b4b8a868e99469afa0d761fc1fe3839cf40994dcc092": {
+                "Name": "dojot_data-broker_1",
+                "EndpointID": "2f5d33262f98ad5c4f4766b7c55a6d7e2396128b93725394b2a87301571487dd",
+                "MacAddress": "02:42:ac:16:00:11",
+                "IPv4Address": "172.22.0.17/16",
+                "IPv6Address": ""
+            },
+            "613cc416a6d5b3e1fec2be961cbc8a05c0c15f3cacd48e27fa71274ed13e5999": {
+                "Name": "dojot_iotagent-mqtt_1",
+                "EndpointID": "bee77e8103a9b7b26320afc2fd1c0c3ba71127bcf57701871a4ad1857fd188a9",
+                "MacAddress": "02:42:ac:16:00:18",
+                "IPv4Address": "172.22.0.24/16",
+                "IPv6Address": ""
+            },
+            "68aeb04caa52823db9a06cd1cd250f2f803f4c593cf18c5e5b00dc938424801d": {
+                "Name": "dojot_zookeeper_1",
+                "EndpointID": "0bb4f6f32b93ddebdd2b8bc7cb074660b1d11baca69374981f55b73d8c6a8109",
+                "MacAddress": "02:42:ac:16:00:05",
+                "IPv4Address": "172.22.0.5/16",
+                "IPv6Address": ""
+            },
+            "73928df7dfe2776f6942c397ba490ab7441ce5c5e310520a05be8ae837b39c16": {
+                "Name": "dojot_flowbroker-context-manager_1",
+                "EndpointID": "7cf5f9c7adae2dfc1c02d4224eadd45a51e872078932348cd22fc758cdbf81ab",
+                "MacAddress": "02:42:ac:16:00:0d",
+                "IPv4Address": "172.22.0.13/16",
+                "IPv6Address": ""
+            },
+            "75e7805365be461aaef0f8195f31a2fd1d47adf03c3bcf45b45d262b29bf9c79": {
+                "Name": "dojot_flowbroker_1",
+                "EndpointID": "ca5c1f53a45ba65bc9003e6f9d83481fdc56299283d6b3a6ad8e6ff9222d4978",
+                "MacAddress": "02:42:ac:16:00:19",
+                "IPv4Address": "172.22.0.25/16",
+                "IPv6Address": ""
+            },
+            "7ed34fb9bc19b2aadd681778044d5bce502b2ed3e469dabfbf93a4fd11d10cd8": {
+                "Name": "dojot_rabbitmq_1",
+                "EndpointID": "307e57e0b0ca2fca12b33c12561f0e1a951d5794fb614138b5c1c909d9185391",
+                "MacAddress": "02:42:ac:16:00:0c",
+                "IPv4Address": "172.22.0.12/16",
+                "IPv6Address": ""
+            },
+            "920ade53ee4bee9e2fe189b0def197e2cb3ed4250ec5675d64bef32145048c7d": {
+                "Name": "dojot_device-manager-redis_1",
+                "EndpointID": "d266338449ef3c9a3c259f73c08efd3a5bf4bc11853523329424d47610d8f321",
+                "MacAddress": "02:42:ac:16:00:0a",
+                "IPv4Address": "172.22.0.10/16",
+                "IPv6Address": ""
+            },
+            "aefe0c4e19c12314d3befc76b6ea3845f080f2b1183482efa88afccf599d5c37": {
+                "Name": "dojot_minio_1",
+                "EndpointID": "d88160f0a8c214b4b82328b9e1bee1e7928de6607d87260660e01ad2f519d733",
+                "MacAddress": "02:42:ac:16:00:09",
+                "IPv4Address": "172.22.0.9/16",
+                "IPv6Address": ""
+            },
+            "b6c61e0e0206049d51914df1ae387326bc737bac0ad4d5b8c88025f8f85d5d0b": {
+                "Name": "dojot_apigw_1",
+                "EndpointID": "46a78a4c69cd73686edb5099eb24fef04be6cdc76befbd59ea31738eb20bef68",
+                "MacAddress": "02:42:ac:16:00:14",
+                "IPv4Address": "172.22.0.20/16",
+                "IPv6Address": ""
+            },
+            "b86e612c6db22e531a3792b8fb463f51755e5f6682c9f1bb0b0ac7e6d470e2c0": {
+                "Name": "dojot_image-manager_1",
+                "EndpointID": "9aa3bfb56bc60d53a52c1fe320472f7cea434e14abd7dcdd635b53e1e93a2997",
+                "MacAddress": "02:42:ac:16:00:12",
+                "IPv4Address": "172.22.0.18/16",
+                "IPv6Address": ""
+            },
+            "b8e07827fe113e5118b01e605b8f5321aa605955d970d90db7ab23150babd5f1": {
+                "Name": "dojot_device-manager_1",
+                "EndpointID": "032d6ce6aefbfc62c79e6ba23d90bbfb587ee62feb60daef52b8cc8f451e2311",
+                "MacAddress": "02:42:ac:16:00:13",
+                "IPv4Address": "172.22.0.19/16",
+                "IPv6Address": ""
+            },
+            "b93831c1adb9d611bd00078e7814f5492c717a629d6d9df3c7698952d973d41a": {
+                "Name": "dojot_mosca-redis_1",
+                "EndpointID": "a269cf517f6658be25f19f0beeae8363f93980665bc99938d89b9cedf3dfac23",
+                "MacAddress": "02:42:ac:16:00:02",
+                "IPv4Address": "172.22.0.2/16",
+                "IPv6Address": ""
+            },
+            "c8b8f0aab53e220466864a665aed6968402593b68b540fe225d57ba5e45978e4": {
+                "Name": "dojot_ejbca_1",
+                "EndpointID": "4a7c20fef7c9adc53e56552a27e7aaa19d00ff1a90a27a1a880d909f84fea72c",
+                "MacAddress": "02:42:ac:16:00:0b",
+                "IPv4Address": "172.22.0.11/16",
+                "IPv6Address": ""
+            },
+            "d1a9ada99e4e17d870f817180d4e8d78015e5059885d7ee53e98d11bc2be934f": {
+                "Name": "dojot_cron_1",
+                "EndpointID": "8a2f2f5601b40ed0abdebfa204fa5bb29a5f6519f0ea41f3da643ba499dc46a7",
+                "MacAddress": "02:42:ac:16:00:1b",
+                "IPv4Address": "172.22.0.27/16",
+                "IPv6Address": ""
+            },
+            "d9f0cd25ca06df5445cbdb63e32ec0db0ce766aeee1e51444d2ff2d01c0a3aa8": {
+                "Name": "dojot_history_1",
+                "EndpointID": "aee9d28d4547ad333aeacc9818e628725c1121ba07bd2350d98013701bc1959a",
+                "MacAddress": "02:42:ac:16:00:10",
+                "IPv4Address": "172.22.0.16/16",
+                "IPv6Address": ""
+            },
+            "e5ee3dcd6ec84bb02dc0a7657ef12b123484607419c9e35950a7cad120f6e9d7": {
+                "Name": "dojot_backstage_1",
+                "EndpointID": "f4e48a1e8f32781106c23f6e2badfe5e0ba734f6752abad44a17ad789d95ac65",
+                "MacAddress": "02:42:ac:16:00:0f",
+                "IPv4Address": "172.22.0.15/16",
+                "IPv6Address": ""
+            },
+            "eada35b3bf33f4baa13ffbe02ca7a4d0e3ba310c5cd6c9cef7283ee647613c75": {
+                "Name": "dojot_kafka_1",
+                "EndpointID": "10123a0ec0fe3a48da0531cf4facf38d438968fe7703311edd9e621851c2684b",
+                "MacAddress": "02:42:ac:16:00:0e",
+                "IPv4Address": "172.22.0.14/16",
+                "IPv6Address": ""
+            },
+            "f436516133f2b1cafb965e5917cbdbd51cfd78152155a074fdb09ff25e306355": {
+                "Name": "dojot_data-manager_1",
+                "EndpointID": "3e345015ee70d0b1b57f1558544a0292fa737d3fe69d83ebb32587f8cce54a39",
+                "MacAddress": "02:42:ac:16:00:1c",
+                "IPv4Address": "172.22.0.28/16",
+                "IPv6Address": ""
+            },
+            "f86f0c3045a5787aa2db0f724755d1c8951ec039a47bb13e2282ef28edf28042": {
+                "Name": "dojot_persister_1",
+                "EndpointID": "ad7f74f3bed4b2e19c332408c5830a8c9d328d0f3bd8b4ca4deda9dc6e47a7fa",
+                "MacAddress": "02:42:ac:16:00:17",
+                "IPv4Address": "172.22.0.23/16",
+                "IPv6Address": ""
+            },
+            "fe7d60032c34618a112e107f3f2f325964ea09b40acb08cdab4dfbee4e0bb6ab": {
+                "Name": "dojot_flowbroker-redis_1",
+                "EndpointID": "64d1b10cae373b14ef377d8d71c1b094983d224ed089b04fcd76de2406801f61",
+                "MacAddress": "02:42:ac:16:00:07",
+                "IPv4Address": "172.22.0.7/16",
+                "IPv6Address": ""
+            }
+        },
+        "Options": {},
+        "Labels": {
+            "com.docker.compose.network": "default",
+            "com.docker.compose.project": "dojot",
+            "com.docker.compose.version": "1.24.0"
+        }
+    }
+]

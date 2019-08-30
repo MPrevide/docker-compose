@@ -35,7 +35,7 @@ PAYLOAD
     "upstream_url": "http://data-broker:80"
 }
 PAYLOAD
-authConfig "data-broker"
+#authConfig "data-broker"
 (curl -o /dev/null ${kong}/apis -sS -X POST \
     --header "Content-Type: application/json" \
     -d @- ) <<PAYLOAD
@@ -68,7 +68,7 @@ PAYLOAD
     "upstream_url": "http://device-manager:5000"
 }
 PAYLOAD
-authConfig "device-manager"
+#authConfig "device-manager"
 
 (curl -o /dev/null ${kong}/apis -s -S -X POST \
     --header "Content-Type: application/json" \
@@ -108,8 +108,8 @@ PAYLOAD
 # rate plugin limit to avoid brute-force atacks
 curl -o /dev/null -sS -X POST ${kong}/apis/auth-service/plugins \
     --data "name=rate-limiting" \
-    --data "config.minute=5" \
-    --data "config.hour=40" \
+    --data "config.minute=9999999999" \
+    --data "config.hour=99999999999" \
     --data "config.policy=local"
 
 
@@ -198,12 +198,12 @@ authConfig "history"
     -d @- ) <<PAYLOAD
 {
      "name": "ejbca-paths",
-     "uris": [ "/sign", "/ca"],
+     "uris": [ "/sign(.*)", "/ca(.*)","/user(.*)"],
      "strip_uri": false,
      "upstream_url": "http://ejbca:5583/"
  }
 PAYLOAD
-authConfig "ejbca-paths"
+#authConfig "ejbca-paths"
 
 # Configure import and export endpoint
 (curl -o /dev/null ${kong}/apis -sS -X POST \

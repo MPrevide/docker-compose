@@ -49,7 +49,7 @@ services:
         max-size: 100m
 
   iotagent-mqtt:
-    image: dojot/iotagent-mosca:development
+    image: mqtt:1
     depends_on:
       - mosca-redis
       - kafka
@@ -64,6 +64,11 @@ services:
       DOJOT_MANAGEMENT_USER: 'iotagent-mqtt'
       KAFKA_GROUP_ID: 'iotagent-mqtt-group'
       ALLOW_UNSECURED_MODE: 'false'
+      NODE_DEBUG: 'tls'
+      MOSCA_TLS_CON_MAX_LIFETIME: 54545454
+      MOSCA_TLS_CON_IDLE_TIMEOUT: 'ffsdff'
+      LOG_LEVEL: 'debug'
+      HC_UPTIME_TIMEOUT: 300000
     logging:
       driver: json-file
       options:
