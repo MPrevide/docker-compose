@@ -2,7 +2,7 @@ version: '2.1'
 services:
 
   history:
-    image: dojot/history:development
+    image: dojot/hist:julia
     restart: always
     depends_on:
       - mongodb
@@ -15,7 +15,7 @@ services:
         max-size: 100m
 
   persister:
-    image: dojot/persister:development
+    image: dojot/per:julia
     restart: always
     depends_on:
       - mongodb
@@ -63,11 +63,13 @@ services:
     environment:
       DOJOT_MANAGEMENT_USER: 'iotagent-mqtt'
       KAFKA_GROUP_ID: 'iotagent-mqtt-group'
-      ALLOW_UNSECURED_MODE: 'false'
+      ALLOW_UNSECURED_MODE: 'true'
       NODE_DEBUG: 'tls'
-      MOSCA_TLS_CON_MAX_LIFETIME: 54545454
-      MOSCA_TLS_CON_IDLE_TIMEOUT: 'ffsdff'
-      LOG_LEVEL: 'debug'
+      DEGUG: 'ascoltatori:mqtt'
+      MOSCA_TLS_CON_MAX_LIFETIME: 120000
+      MOSCA_TLS_CON_IDLE_TIMEOUT: 90000
+      MQTTREST_CRL_UPDATE_TIME: 'null'
+      # LOG_LEVEL: 'warn'
       HC_UPTIME_TIMEOUT: 300000
     logging:
       driver: json-file
@@ -167,7 +169,7 @@ services:
     command: server /data
 
   device-manager:
-    image: dojot/device-manager:development
+    image: dojot/device-manager:kevin
     restart: always
     environment:
       # TODO: Fill these env variables with suitable values
@@ -370,12 +372,14 @@ services:
 
   ejbca:
     image: "dojot/ejbca-rest:development"
+    ports:
+      - 5583:5583
     environment:
       DOJOT_MANAGEMENT_USER: 'ejbca'
       KAFKA_GROUP_ID: 'ejbca-group'
     restart: always
     logging:
-      driver: json-file
+      driver: json-file 
       options:
         max-size: 100m
 
