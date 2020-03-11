@@ -63,7 +63,7 @@ services:
     environment:
       DOJOT_MANAGEMENT_USER: 'iotagent-mqtt'
       KAFKA_GROUP_ID: 'iotagent-mqtt-group'
-      ALLOW_UNSECURED_MODE: 'false'
+      ALLOW_UNSECURED_MODE: 'true'
       MOSCA_TLS_DNS_LIST: 'localhost'
     logging:
       driver: json-file
@@ -165,6 +165,8 @@ services:
   device-manager:
     image: dojot/device-manager:v0.4.2
     restart: always
+    ports:
+      - 5555:5000
     environment:
       # TODO: Fill these env variables with suitable values
       - DEV_MNGR_CRYPTO_PASS="kamehameHA"
@@ -383,6 +385,8 @@ services:
 
   backstage:
     image: "dojot/backstage:v0.4.2"
+    # ports:
+    #   - "3005:3005"
     restart: always
     depends_on:
       - postgres
