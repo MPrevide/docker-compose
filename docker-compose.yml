@@ -79,7 +79,7 @@ services:
         max-size: 100m
 
   data-broker:
-    image: dojot/data-broker:v0.4.2
+    image: eduardogmisiuk/data-broker:test_epic
     restart: always
     depends_on:
       - kafka
