@@ -296,7 +296,7 @@ services:
         max-size: 100m
 
   flowbroker:
-    image: dojot/flowbroker:v0.4.2
+    image: flowbroker:ftp
     restart: always
     environment:
       DEPLOY_ENGINE: "docker"
