@@ -303,6 +303,7 @@ services:
       FLOWBROKER_NETWORK: ${FLOWBROKER_NETWORK}
       DOJOT_MANAGEMENT_USER: 'flowbroker'
       KAFKA_GROUP_ID: 'flowbroker-group'
+      LOG_LEVEL: 'debug'
     depends_on:
       - rabbitmq
       - kafka
