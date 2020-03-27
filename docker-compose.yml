@@ -400,11 +400,14 @@ services:
     restart: always
 
   sdk:
-    image: sdk:test1
+    image: kafka2ftp:test
     depends_on:
       - kafka
       - data-broker
+      - flowbroker
     restart: always
+    volumes:
+      - /home/mariane/proj/dojot/dojot/connector/kafka2ftp/app/:/opt/kafka2ftp/app/:Z
 
 networks:
   flowbroker:
