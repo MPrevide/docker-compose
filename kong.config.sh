@@ -1,120 +1,126 @@
-#!/bin/sh -ex
+#!/bin/sh
 
 kong="http://apigw:8001"
 
+addAuthEndpoint() {
+#$1 = Service Name
+echo "addAuthEndpoint: ServiceName=${1}"
+curl  -sS  -X POST \
+--url ${kong}/services/${1}/plugins/ \
+--data "name=pepkong" \
+--data "config.pdpUrl=http://auth:5000/pdp"
 
-authAPI() {
-    echo "authConfigService ${1}"
-
-    curl -o /dev/null -s  -i -X POST \
-    --url ${kong}/services/${1}/plugins/ \
-    --data "name=pepkong" \
-    --data "config.pdpUrl=http://auth:5000/pdp"
-
-    curl -o /dev/null -s  -i -X POST \
-    --url ${kong}/services/${1}/plugins/ \
-    --data "name=jwt"
+curl  -sS  -X POST \
+--url ${kong}/services/${1}/plugins/ \
+--data "name=jwt"
+echo ""
 }
 
 createService() {
 #$1 = Service Name
 #$2 = URL (ex.: http://gui:80)
-    echo "createService ${1} ${2}"
-    curl -o /dev/null -s -i -X PUT \
-    --url ${kong}/services/${1} \
-    --data "name=${1}" \
-    --data "url=${2}"
+echo "createService: ServiceName=${1} Url=${2}"
+curl  -sS -X PUT \
+--url ${kong}/services/${1} \
+--data "name=${1}" \
+--data "url=${2}"
+echo ""
 }
 
 createRoute() {
 #$1 = Service Name
 #$2 = Route Name
-#$3 = PATHS (ex.: /,/x)
-#$4 = strip_path
-(curl -o /dev/null ${kong}/services/${1}/routes/${2} -sS -X PUT \
+#$3 = PATHS (ex.: '"/","/x"')
+#$4 = strip_path (true or false)
+echo "createRoute: ServiceName=${1} Url=${2} PathS=${3} StripPath=${4}"
+(curl  ${kong}/services/${1}/routes/${2} -sS -X PUT \
     --header "Content-Type: application/json" \
     -d @- ) <<PAYLOAD
 {
-    "paths": ["${3}"],
+    "paths": [${3}],
     "strip_path": ${4}
 }
 PAYLOAD
+echo ""
 }
 
 
 
-createAPI(){
+createEndpoint(){
 #$1 = Service Name
-#$2 = URL (ex.: http://gui:80)
-#$3 = PATHS (ex.: /,/x)
-#$4 = strip_path
-    createService "${1}" "${2}"
-    createRoute "${1}" "${1}_route" "${3}" "${4}"
+#$2 = URL (ex.: "http://gui:80")
+#$3 = PATHS (ex.: '"/","/x"')
+#$4 = strip_path ("true" or "false")
+#ex1: createEndpoint  "data-broker" "http://data-broker:80"  '"/device/(.*)/latest", "/subscription"' "false"
+#ex2: createEndpoint "image" "http://image-manager:5000"  '"/fw-image"' "true"
+echo "createEndpoint: ServiceName=${1} Url=${2} PathS=${3} StripPath=${4}"
+createService "${1}" "${2}"
+createRoute "${1}" "${1}_route" "${3}" "${4}"
+echo ""
 }
 
 
-createAPI "gui" "http://gui:80"  "/" "false"
+createEndpoint "gui" "http://gui:80"  '"/"' "false"
 
-createAPI  "data-broker" "http://data-broker:80"  '/device/(.*)/latest", "/subscription' "false"
-authAPI "data-broker"
+createEndpoint  "data-broker" "http://data-broker:80"  '"/device/(.*)/latest", "/subscription"' "false"
+addAuthEndpoint "data-broker"
 
-createAPI "data-streams" "http://data-broker:80"  "/stream" "true"
-authAPI "data-streams"
+createEndpoint "data-streams" "http://data-broker:80"  '"/stream"' "true"
+addAuthEndpoint "data-streams"
 
-createAPI "ws-http" "http://data-broker:80"  "/socket.io" "false"
+createEndpoint "ws-http" "http://data-broker:80"  '"/socket.io"' "false"
 
-createAPI "device-manager" "http://device-manager:5000"  '"/device", "/template"' "false"
-authAPI "device-manager"
+createEndpoint "device-manager" "http://device-manager:5000"  '"/device", "/template"' "false"
+addAuthEndpoint "device-manager"
 
-createAPI "image" "http://image-manager:5000"  '/fw-image' "true"
-authAPI "image"
+createEndpoint "image" "http://image-manager:5000"  '"/fw-image"' "true"
+addAuthEndpoint "image"
 
-createAPI "auth-permissions-service" "http://auth:5000/pap"  '/auth/pap' "true"
-authAPI "auth-permissions-service"
+createEndpoint "auth-permissions-service" "http://auth:5000/pap"  '"/auth/pap"' "true"
+addAuthEndpoint "auth-permissions-service"
 
-createAPI "auth-service" "http://auth:5000"  '/auth' "true"
-# authAPI "auth-service"
+createEndpoint "auth-service" "http://auth:5000"  '"/auth"' "true"
 
+curl  -s  -sS -X POST \
+--url ${kong}/services/auth-service/plugins/ \
+--data "name=rate-limiting" \
+--data "config.minute=5" \
+--data "config.hour=40" \
+--data "config.policy=local"
+
+createEndpoint "auth-revoke" "http://auth:5000"  '"/auth/revoke"' "false"
 
 # no auth: this is actually the endpoint used to get a token
 # rate plugin limit to avoid brute-force atacks
-# curl -o /dev/null -sS -X POST ${kong}/apis/auth-service/plugins \
-#     --data "name=rate-limiting" \
-#     --data "config.minute=5" \
-#     --data "config.hour=40" \
-#     --data "config.policy=local"
+curl  -s  -sS -X POST \
+--url ${kong}/services/auth-revoke/plugins/ \
+    --data "name=auth-service" \
+    --data "config.status_code=403" \
+    --data "config.message=Not authorized"
 
-createAPI "auth-revoke" "http://auth:5000"  '/auth/revoke' "false"
-authAPI "auth-revoke"
+createEndpoint "user-service" "http://auth:5000/user"  '"/auth/user"' "true"
+addAuthEndpoint "user-service"
 
-# curl -o /dev/null -sS -X POST  ${kong}/apis/auth-revoke/plugins \
-#     --data "name=request-termination" \
-#     --data "config.status_code=403" \
-#     --data "config.message=Not authorized"
+createEndpoint "flows" "http://flowbroker:80"  '"/flows"' "true"
+addAuthEndpoint "flows"
 
-createAPI "user-service" "http://auth:5000/user"  '/auth/user' "true"
-authAPI "user-service"
+createEndpoint "flowsIcons" "http://flowbroker:80/icons"  '"/flows/icons"' "true"
+addAuthEndpoint "flowsIcons"
 
-createAPI "flows" "http://flowbroker:80"  '/flows' "true"
-authAPI "flows"
+createEndpoint "flowsRedImages" "http://flowbroker:80/red/images"  '"/flows/red/images"' "true"
+addAuthEndpoint "flowsRedImages"
 
-createAPI "flowsIcons" "http://flowbroker:80/icons"  '/flows/icons' "true"
-authAPI "flowsIcons"
+createEndpoint "history" "http://history:8000"  '"/history"' "true"
+addAuthEndpoint "history"
 
-createAPI "flowsRedImages" "http://flowbroker:80/red/images"  '/flows/red/images' "true"
-authAPI "flowsRedImages"
+createEndpoint "ejbca-paths" "http://ejbca:5583/"  '"/sign", "/ca", "/user"' "false"
+addAuthEndpoint "ejbca-paths"
 
-createAPI "history" "http://history:8000"  '/history' "true"
-authAPI "history"
+createEndpoint "data-manager" "http://data-manager:3000/"  '"/export", "/import"' "false"
+addAuthEndpoint "data-manager"
 
-createAPI "ejbca-paths" "http://ejbca:5583/"  '"/sign", "/ca", "/user"' "false"
-authAPI "ejbca-paths"
+createEndpoint "backstage_graphql" "http://backstage:3005/"  '"/graphql(.*)"' "false"
 
-createAPI "data-manager" "http://data-manager:3000/"  '"/export", "/import"' "false"
-authAPI "data-manager"
-
-createAPI "backstage_graphql" "http://backstage:3005/"  '/graphql(.*)' "false"
-
-createAPI "cron" "http://cron:5000/"  '/cron' "false"
-authAPI "cron"
+createEndpoint "cron" "http://cron:5000/"  '"/cron"' "false"
+addAuthEndpoint "cron"
 
