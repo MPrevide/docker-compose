@@ -2,6 +2,15 @@
 
 kong="http://apigw:8001"
 
+#check Kong its ok
+if curl --output /dev/null --silent --head --fail "$kong"; then
+  echo -e "Kong is started."
+else
+  echo -e "Kong isn't started."
+  echo -e "Terminating.."
+  exit 1
+fi
+
 addAuthEndpoint() {
 #$1 = Service Name
 echo -e ""

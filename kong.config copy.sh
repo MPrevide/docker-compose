@@ -3,6 +3,9 @@
 # ---  0.10.x
 kong="http://apigw:8001"
 
+#check apigw its ok
+curl -sSf http://apigw:8001 > /dev/nul
+
 authConfig() {
   curl -o /dev/null -sS -X POST ${kong}/apis/${1}/plugins -d "name=jwt" # -d "config.claims_to_verify=exp"
   curl -o /dev/null -sS -X POST ${kong}/apis/${1}/plugins -d "name=pepkong" -d "config.pdpUrl=http://auth:5000/pdp"
