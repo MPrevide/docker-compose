@@ -256,7 +256,7 @@ services:
         max-size: 100m
 
   kong-migrations:
-    image: kong:test
+    image: dojot/kong:development
     command: kong migrations bootstrap
     depends_on:
       postgres:
@@ -275,7 +275,7 @@ services:
         max-size: 100m
 
   kong-migrations-up:
-    image:  kong:test
+    image:  dojot/kong:development
     command: kong migrations up && kong migrations finish
     depends_on:
       - postgres
@@ -296,7 +296,7 @@ services:
         max-size: 100m
 
   apigw:
-    image:  kong:test
+    image:  dojot/kong:development
     user: "kong"
     depends_on:
       - postgres
@@ -426,7 +426,6 @@ services:
       driver: json-file
       options:
         max-size: 100m
-
 
   data-manager:
     image: dojot/data-manager:development
