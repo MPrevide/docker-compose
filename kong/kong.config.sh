@@ -2,7 +2,7 @@
 
 kong="http://apigw:8001"
 
-#check if kong is started
+# check if kong is started
 if curl --output /dev/null --silent --head --fail "$kong"; then
   echo "Kong is started."
 else
@@ -11,11 +11,12 @@ else
   exit 1
 fi
 
-addAuthEndpoint() {
-#$1 = Service Name
+# add authentication to an endpoint
+addAuthToEndpoint() {
+# $1 = Service Name
 echo ""
 echo ""
-echo "- addAuthEndpoint: ServiceName=${1}"
+echo "- addAuthToEndpoint: ServiceName=${1}"
 curl  -sS  -X POST \
 --url ${kong}/services/"${1}"/plugins/ \
 --data "name=pepkong" \
@@ -26,9 +27,12 @@ curl  -sS  -X POST \
 --data "name=jwt"
 }
 
+# add a Service
+# that is the name Kong uses to refer to the upstream APIs
+# and microservices it manages.
 createService() {
-#$1 = Service Name
-#$2 = URL (ex.: http://gui:80)
+# $1 = Service Name
+# $2 = URL (ex.: http://gui:80)
 echo ""
 echo "-- createService: ServiceName=${1} Url=${2}"
 curl  -sS -X PUT \
@@ -37,11 +41,14 @@ curl  -sS -X PUT \
 --data "url=${2}"
 }
 
+# add a Route
+# The Route represents the actual request to the Kong proxy
+# endpoint to reach at Kong service.
 createRoute() {
-#$1 = Service Name
-#$2 = Route Name
-#$3 = PATHS (ex.: '"/","/x"')
-#$4 = strip_path (true or false)
+# $1 = Service Name
+# $2 = Route Name
+# $3 = PATHS (ex.: '"/","/x"')
+# $4 = strip_path (true or false), When matching a Route via one of the paths, strip the matching prefix from the upstream request URL
 echo ""
 echo "-- createRoute: ServiceName=${1} Url=${2} PathS=${3} StripPath=${4}"
 (curl  ${kong}/services/"${1}"/routes/"${2}" -sS -X PUT \
@@ -54,14 +61,14 @@ echo "-- createRoute: ServiceName=${1} Url=${2} PathS=${3} StripPath=${4}"
 PAYLOAD
 }
 
-
-#ex1: createEndpoint  "data-broker" "http://data-broker:80"  '"/device/(.*)/latest", "/subscription"' "false"
-#ex2: createEndpoint "image" "http://image-manager:5000"  '"/fw-image"' "true"
+# Create an endpoint mapping in Kong
+# ex1: createEndpoint "data-broker" "http://data-broker:80"  '"/device/(.*)/latest", "/subscription"' "false"
+# ex2: createEndpoint "image" "http://image-manager:5000"  '"/fw-image"' "true"
 createEndpoint(){
-#$1 = Service Name
-#$2 = URL (ex.: "http://gui:80")
-#$3 = PATHS (ex.: '"/","/x"')
-#$4 = strip_path ("true" or "false")
+# $1 = Service Name
+# $2 = URL (ex.: "http://gui:80")
+# $3 = PATHS (ex.: '"/","/x"')
+# $4 = strip_path ("true" or "false"), When matching a Route via one of the paths, strip the matching prefix from the upstream request URL.
 echo ""
 echo ""
 echo "- createEndpoint: ServiceName=${1} Url=${2} PathS=${3} StripPath=${4}"
@@ -69,25 +76,32 @@ createService "${1}" "${2}"
 createRoute "${1}" "${1}_route" "${3}" "${4}"
 }
 
+# service: gui
 
 createEndpoint "gui" "http://gui:80"  '"/"' "false"
 
+# service: data-broker
+
 createEndpoint  "data-broker" "http://data-broker:80"  '"/device/(.*)/latest", "/subscription"' "false"
-addAuthEndpoint "data-broker"
+addAuthToEndpoint "data-broker"
 
 createEndpoint "data-streams" "http://data-broker:80"  '"/stream"' "true"
-addAuthEndpoint "data-streams"
+addAuthToEndpoint "data-streams"
 
 createEndpoint "ws-http" "http://data-broker:80"  '"/socket.io"' "false"
 
 createEndpoint "device-manager" "http://device-manager:5000"  '"/device", "/template"' "false"
-addAuthEndpoint "device-manager"
+addAuthToEndpoint "device-manager"
+
+# service: image-manager
 
 createEndpoint "image" "http://image-manager:5000"  '"/fw-image"' "true"
-addAuthEndpoint "image"
+addAuthToEndpoint "image"
+
+# service: auth
 
 createEndpoint "auth-permissions-service" "http://auth:5000/pap"  '"/auth/pap"' "true"
-addAuthEndpoint "auth-permissions-service"
+addAuthToEndpoint "auth-permissions-service"
 
 createEndpoint "auth-service" "http://auth:5000"  '"/auth"' "true"
 echo ""
@@ -112,26 +126,38 @@ curl  -s  -sS -X POST \
     --data "config.message=Not authorized"
 
 createEndpoint "user-service" "http://auth:5000/user"  '"/auth/user"' "true"
-addAuthEndpoint "user-service"
+addAuthToEndpoint "user-service"
+
+# service: flowbroker
 
 createEndpoint "flows" "http://flowbroker:80"  '"/flows"' "true"
-addAuthEndpoint "flows"
+addAuthToEndpoint "flows"
 
 createEndpoint "flowsIcons" "http://flowbroker:80/icons"  '"/flows/icons"' "true"
 
 createEndpoint "flowsRedImages" "http://flowbroker:80/red/images"  '"/flows/red/images"' "true"
 
+# service: history
+
 createEndpoint "history" "http://history:8000"  '"/history"' "true"
-addAuthEndpoint "history"
+addAuthToEndpoint "history"
+
+# service: ejbca
 
 createEndpoint "ejbca-paths" "http://ejbca:5583/"  '"/sign", "/ca", "/user"' "false"
-addAuthEndpoint "ejbca-paths"
+addAuthToEndpoint "ejbca-paths"
+
+# service: data-manager
 
 createEndpoint "data-manager" "http://data-manager:3000/"  '"/export", "/import"' "false"
-addAuthEndpoint "data-manager"
+addAuthToEndpoint "data-manager"
+
+# service: backstage
 
 createEndpoint "backstage_graphql" "http://backstage:3005/"  '"/graphql(.*)"' "false"
 
+# service: cron
+
 createEndpoint "cron" "http://cron:5000/"  '"/cron"' "false"
-addAuthEndpoint "cron"
+addAuthToEndpoint "cron"
 
