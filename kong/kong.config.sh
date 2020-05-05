@@ -2,7 +2,7 @@
 
 kong="http://apigw:8001"
 
-#check Kong its ok
+#check if kong is started
 if curl --output /dev/null --silent --head --fail "$kong"; then
   echo "Kong is started."
 else
