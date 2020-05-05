@@ -4,35 +4,35 @@ kong="http://apigw:8001"
 
 #check Kong its ok
 if curl --output /dev/null --silent --head --fail "$kong"; then
-  echo -e "Kong is started."
+  echo "Kong is started."
 else
-  echo -e "Kong isn't started."
-  echo -e "Terminating..."
+  echo "Kong isn't started."
+  echo "Terminating..."
   exit 1
 fi
 
 addAuthEndpoint() {
 #$1 = Service Name
-echo -e ""
-echo -e ""
-echo -e "- addAuthEndpoint: ServiceName=${1}"
+echo ""
+echo ""
+echo "- addAuthEndpoint: ServiceName=${1}"
 curl  -sS  -X POST \
---url ${kong}/services/${1}/plugins/ \
+--url ${kong}/services/"${1}"/plugins/ \
 --data "name=pepkong" \
 --data "config.pdpUrl=http://auth:5000/pdp"
 
 curl  -sS  -X POST \
---url ${kong}/services/${1}/plugins/ \
+--url ${kong}/services/"${1}"/plugins/ \
 --data "name=jwt"
 }
 
 createService() {
 #$1 = Service Name
 #$2 = URL (ex.: http://gui:80)
-echo -e ""
-echo -e "-- createService: ServiceName=${1} Url=${2}"
+echo ""
+echo "-- createService: ServiceName=${1} Url=${2}"
 curl  -sS -X PUT \
---url ${kong}/services/${1} \
+--url ${kong}/services/"${1}" \
 --data "name=${1}" \
 --data "url=${2}"
 }
@@ -42,9 +42,9 @@ createRoute() {
 #$2 = Route Name
 #$3 = PATHS (ex.: '"/","/x"')
 #$4 = strip_path (true or false)
-echo -e ""
-echo -e "-- createRoute: ServiceName=${1} Url=${2} PathS=${3} StripPath=${4}"
-(curl  ${kong}/services/${1}/routes/${2} -sS -X PUT \
+echo ""
+echo "-- createRoute: ServiceName=${1} Url=${2} PathS=${3} StripPath=${4}"
+(curl  ${kong}/services/"${1}"/routes/"${2}" -sS -X PUT \
     --header "Content-Type: application/json" \
     -d @- ) <<PAYLOAD
 {
@@ -62,9 +62,9 @@ createEndpoint(){
 #$2 = URL (ex.: "http://gui:80")
 #$3 = PATHS (ex.: '"/","/x"')
 #$4 = strip_path ("true" or "false")
-echo -e ""
-echo -e ""
-echo -e "- createEndpoint: ServiceName=${1} Url=${2} PathS=${3} StripPath=${4}"
+echo ""
+echo ""
+echo "- createEndpoint: ServiceName=${1} Url=${2} PathS=${3} StripPath=${4}"
 createService "${1}" "${2}"
 createRoute "${1}" "${1}_route" "${3}" "${4}"
 }
@@ -90,9 +90,9 @@ createEndpoint "auth-permissions-service" "http://auth:5000/pap"  '"/auth/pap"' 
 addAuthEndpoint "auth-permissions-service"
 
 createEndpoint "auth-service" "http://auth:5000"  '"/auth"' "true"
-echo -e ""
-echo -e ""
-echo -e "- add plugin rate-limiting in auth-service"
+echo ""
+echo ""
+echo "- add plugin rate-limiting in auth-service"
 curl  -s  -sS -X POST \
 --url ${kong}/services/auth-service/plugins/ \
 --data "name=rate-limiting" \
@@ -103,9 +103,9 @@ curl  -s  -sS -X POST \
 createEndpoint "auth-revoke" "http://auth:5000"  '"/auth/revoke"' "false"
 # no auth: this is actually the endpoint used to get a token
 # rate plugin limit to avoid brute-force atacks
-echo -e ""
-echo -e ""
-echo -e "- add plugin request-termination in auth-revoke"
+echo ""
+echo ""
+echo "- add plugin request-termination in auth-revoke"
 curl  -s  -sS -X POST \
 --url ${kong}/services/auth-revoke/plugins/ \
     --data "name=request-termination" \
