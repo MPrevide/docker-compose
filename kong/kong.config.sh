@@ -101,7 +101,6 @@ curl  -s  -sS -X POST \
 --data "config.policy=local"
 
 createEndpoint "auth-revoke" "http://auth:5000"  '"/auth/revoke"' "false"
-# no auth: this is actually the endpoint used to get a token
 # rate plugin limit to avoid brute-force atacks
 echo ""
 echo ""
