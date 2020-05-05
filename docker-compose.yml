@@ -222,6 +222,7 @@ services:
       options:
         max-size: 100m
 
+  # Prepare database, Bootstrap the database
   kong-migrations:
     image: dojot/kong:development
     command: kong migrations bootstrap
@@ -241,6 +242,7 @@ services:
       options:
         max-size: 100m
 
+  # Run any new migrations and Finish running any pending migrations after 'up'.
   kong-migrations-up:
     image:  dojot/kong:development
     command: kong migrations up && kong migrations finish
