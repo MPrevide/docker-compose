@@ -119,10 +119,8 @@ createEndpoint "flows" "http://flowbroker:80"  '"/flows"' "true"
 addAuthEndpoint "flows"
 
 createEndpoint "flowsIcons" "http://flowbroker:80/icons"  '"/flows/icons"' "true"
-addAuthEndpoint "flowsIcons"
 
 createEndpoint "flowsRedImages" "http://flowbroker:80/red/images"  '"/flows/red/images"' "true"
-addAuthEndpoint "flowsRedImages"
 
 createEndpoint "history" "http://history:8000"  '"/history"' "true"
 addAuthEndpoint "history"
