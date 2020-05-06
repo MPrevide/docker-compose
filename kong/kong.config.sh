@@ -90,6 +90,8 @@ addAuthToEndpoint "data-streams"
 
 createEndpoint "ws-http" "http://data-broker:80"  '"/socket.io"' "false"
 
+# service: device-manager
+
 createEndpoint "device-manager" "http://device-manager:5000"  '"/device", "/template"' "false"
 addAuthToEndpoint "device-manager"
 
