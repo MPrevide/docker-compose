@@ -3,11 +3,14 @@
 kong="http://apigw:8001"
 
 # check if kong is started
+echo ""
+echo "It will check if the kong has already started."
 if curl --output /dev/null --silent --head --fail "$kong"; then
   echo "Kong is started."
 else
   echo "Kong isn't started."
   echo "Terminating in 20s..."
+  echo ""
   sleep 20
   exit 1
 fi
