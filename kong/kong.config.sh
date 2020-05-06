@@ -7,7 +7,8 @@ if curl --output /dev/null --silent --head --fail "$kong"; then
   echo "Kong is started."
 else
   echo "Kong isn't started."
-  echo "Terminating..."
+  echo "Terminating in 20s..."
+  sleep 20
   exit 1
 fi
 
