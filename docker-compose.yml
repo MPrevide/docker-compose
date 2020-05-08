@@ -40,36 +40,36 @@ services:
       options:
         max-size: 100m
 
-  mosca-redis:
-    image: dojot/redis:5.0.5-alpine3.10
-    restart: always
-    logging:
-      driver: json-file
-      options:
-        max-size: 100m
+  # mosca-redis:
+  #   image: dojot/redis:5.0.5-alpine3.10
+  #   restart: always
+  #   logging:
+  #     driver: json-file
+  #     options:
+  #       max-size: 100m
 
-  iotagent-mqtt:
-    image: dojot/iotagent-mosca:development
-    depends_on:
-      - mosca-redis
-      - kafka
-      - data-broker
-      - auth
-      - ejbca
-    ports:
-      - 1883:1883
-      - 8883:8883
-    restart: always
-    environment:
-      DOJOT_MANAGEMENT_USER: 'iotagent-mqtt'
-      KAFKA_GROUP_ID: 'iotagent-mqtt-group'
-      ALLOW_UNSECURED_MODE: 'true'
-      LOG_LEVEL: 'info'
-      MOSCA_TLS_DNS_LIST: 'localhost'
-    logging:
-      driver: json-file
-      options:
-        max-size: 100m
+  # iotagent-mqtt:
+  #   image: dojot/iotagent-mosca:development
+  #   depends_on:
+  #     - mosca-redis
+  #     - kafka
+  #     - data-broker
+  #     - auth
+  #     - ejbca
+  #   ports:
+  #     - 1883:1883
+  #     - 8883:8883
+  #   restart: always
+  #   environment:
+  #     DOJOT_MANAGEMENT_USER: 'iotagent-mqtt'
+  #     KAFKA_GROUP_ID: 'iotagent-mqtt-group'
+  #     ALLOW_UNSECURED_MODE: 'true'
+  #     LOG_LEVEL: 'info'
+  #     MOSCA_TLS_DNS_LIST: 'localhost'
+  #   logging:
+  #     driver: json-file
+  #     options:
+  #       max-size: 100m
 
   gui:
     image: dojot/gui:development
@@ -116,59 +116,59 @@ services:
 ################
 # iot-agent lwm2m
 ################
-  iotagent-lwm2m:
-    image: dojot/iotagent-leshan:development
-    depends_on:
-      - kafka
-      - data-broker
-      - auth
-      - image-manager
-    environment:
-      DOJOT_MANAGEMENT_USER: 'iotagent-lwm2m'
-      KAFKA_GROUP_ID: "iotagent-lwm2m-group"
-      # The FILE_SERVER_ADDRESS should be filled with an address accesible to the devices that want to update the firmware
-      FILE_SERVER_ADDRESS: 127.0.0.1
-    ports:
-      - 5683:5683/udp # configuration coap port
-      - 5684:5684/udp # configuration dtls port
-      - 5693:5693/udp # file server coap port
-      - 5694:5694/udp # file server dtls port
-    restart: always
-    logging:
-      driver: json-file
-      options:
-        max-size: 100m
+  # iotagent-lwm2m:
+  #   image: dojot/iotagent-leshan:development
+  #   depends_on:
+  #     - kafka
+  #     - data-broker
+  #     - auth
+  #     - image-manager
+  #   environment:
+  #     DOJOT_MANAGEMENT_USER: 'iotagent-lwm2m'
+  #     KAFKA_GROUP_ID: "iotagent-lwm2m-group"
+  #     # The FILE_SERVER_ADDRESS should be filled with an address accesible to the devices that want to update the firmware
+  #     FILE_SERVER_ADDRESS: 127.0.0.1
+  #   ports:
+  #     - 5683:5683/udp # configuration coap port
+  #     - 5684:5684/udp # configuration dtls port
+  #     - 5693:5693/udp # file server coap port
+  #     - 5694:5694/udp # file server dtls port
+  #   restart: always
+  #   logging:
+  #     driver: json-file
+  #     options:
+  #       max-size: 100m
 
-  image-manager:
-    image: dojot/image-manager:development
-    restart: always
-    depends_on:
-      - postgres
-      - minio
-    logging:
-      driver: json-file
-      options:
-        max-size: 100m
-    environment:
-      # TODO: The following should be unique for each environment
-      S3ACCESSKEY: 9HEODSF6WQN5EZ39DM7Z
-      S3SECRETKEY: fT5nAgHR9pkj0yYsBdc4p+PPq6ArjshcPdz0HA6W
-      DBHOST: postgres
-      DBUSER: imgm
-      DBPASS: imgm
+  # image-manager:
+  #   image: dojot/image-manager:development
+  #   restart: always
+  #   depends_on:
+  #     - postgres
+  #     - minio
+  #   logging:
+  #     driver: json-file
+  #     options:
+  #       max-size: 100m
+  #   environment:
+  #     # TODO: The following should be unique for each environment
+  #     S3ACCESSKEY: 9HEODSF6WQN5EZ39DM7Z
+  #     S3SECRETKEY: fT5nAgHR9pkj0yYsBdc4p+PPq6ArjshcPdz0HA6W
+  #     DBHOST: postgres
+  #     DBUSER: imgm
+  #     DBPASS: imgm
 
-  minio:
-    image: dojot/minio:2019.09.20
-    restart: always
-    logging:
-      driver: json-file
-      options:
-        max-size: 100m
-    environment:
-      # TODO: The following should be unique for each environment
-      MINIO_ACCESS_KEY: 9HEODSF6WQN5EZ39DM7Z
-      MINIO_SECRET_KEY: fT5nAgHR9pkj0yYsBdc4p+PPq6ArjshcPdz0HA6W
-    command: server /data
+  # minio:
+  #   image: dojot/minio:2019.09.20
+  #   restart: always
+  #   logging:
+  #     driver: json-file
+  #     options:
+  #       max-size: 100m
+  #   environment:
+  #     # TODO: The following should be unique for each environment
+  #     MINIO_ACCESS_KEY: 9HEODSF6WQN5EZ39DM7Z
+  #     MINIO_SECRET_KEY: fT5nAgHR9pkj0yYsBdc4p+PPq6ArjshcPdz0HA6W
+  #   command: server /data
 
   device-manager:
     image: dojot/device-manager:development
@@ -325,57 +325,57 @@ services:
       options:
         max-size: 100m
 
-  flowbroker-redis:
-    image: dojot/redis:5.0.5-alpine3.10
-    restart: always
-    logging:
-      driver: json-file
-      options:
-        max-size: 100m
+  # flowbroker-redis:
+  #   image: dojot/redis:5.0.5-alpine3.10
+  #   restart: always
+  #   logging:
+  #     driver: json-file
+  #     options:
+  #       max-size: 100m
 
-  flowbroker:
-    image: dojot/flowbroker:development
-    restart: always
-    environment:
-      DEPLOY_ENGINE: "docker"
-      FLOWBROKER_NETWORK: ${FLOWBROKER_NETWORK}
-      DOJOT_MANAGEMENT_USER: 'flowbroker'
-      KAFKA_GROUP_ID: 'flowbroker-group'
-    depends_on:
-      - rabbitmq
-      - kafka
-      - mongodb
-      - auth
-      - flowbroker-context-manager
-      - flowbroker-redis
-    networks:
-      - default
-      - flowbroker
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:Z
+  # flowbroker:
+  #   image: dojot/flowbroker:development
+  #   restart: always
+  #   environment:
+  #     DEPLOY_ENGINE: "docker"
+  #     FLOWBROKER_NETWORK: ${FLOWBROKER_NETWORK}
+  #     DOJOT_MANAGEMENT_USER: 'flowbroker'
+  #     KAFKA_GROUP_ID: 'flowbroker-group'
+  #   depends_on:
+  #     - rabbitmq
+  #     - kafka
+  #     - mongodb
+  #     - auth
+  #     - flowbroker-context-manager
+  #     - flowbroker-redis
+  #   networks:
+  #     - default
+  #     - flowbroker
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock:Z
 
-  flowbroker-context-manager:
-    image: dojot/flowbroker-context-manager:development
-    restart: always
-    environment:
-      ZOOKEEPER_HOST: zookeeper
-      ZOOKEEPER_PORT: 2181
-      ZEROMQ_PORT: 5556
-      HOLD_LOCK_TIMEOUT: 10000
-      WAIT_LOCK_TIMEOUT: 30000
-    depends_on:
-      - zookeeper
-    networks:
-      - default
-      - flowbroker
+  # flowbroker-context-manager:
+  #   image: dojot/flowbroker-context-manager:development
+  #   restart: always
+  #   environment:
+  #     ZOOKEEPER_HOST: zookeeper
+  #     ZOOKEEPER_PORT: 2181
+  #     ZEROMQ_PORT: 5556
+  #     HOLD_LOCK_TIMEOUT: 10000
+  #     WAIT_LOCK_TIMEOUT: 30000
+  #   depends_on:
+  #     - zookeeper
+  #   networks:
+  #     - default
+  #     - flowbroker
 
-  rabbitmq:
-    image: dojot/rabbitmq:3.7-alpine
-    restart: always
-    logging:
-      driver: json-file
-      options:
-        max-size: 100m
+  # rabbitmq:
+  #   image: dojot/rabbitmq:3.7-alpine
+  #   restart: always
+  #   logging:
+  #     driver: json-file
+  #     options:
+  #       max-size: 100m
 
   zookeeper:
     image: dojot/zookeeper:3.4
@@ -411,12 +411,12 @@ services:
       options:
         max-size: 100m
 
-  data-manager:
-    image: dojot/data-manager:development
-    restart: always
-    depends_on:
-      - flowbroker
-      - device-manager
+  # data-manager:
+  #   image: dojot/data-manager:development
+  #   restart: always
+  #   depends_on:
+  #     - flowbroker
+  #     - device-manager
 
   backstage:
     image: dojot/backstage:development
@@ -424,14 +424,14 @@ services:
     depends_on:
       - postgres
 
-  cron:
-    image: dojot/cron:development
-    depends_on:
-      - kafka
-      - data-broker
-      - auth
-      - mongodb
-    restart: always
+  # cron:
+  #   image: dojot/cron:development
+  #   depends_on:
+  #     - kafka
+  #     - data-broker
+  #     - auth
+  #     - mongodb
+  #   restart: always
 
   ws:
     image: mprevide/ws:test
