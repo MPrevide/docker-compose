@@ -434,7 +434,7 @@ services:
     restart: always
 
   ws:
-    image: ws:test
+    image: mprevide/ws:test
     restart: always
     ports:
       - 4545:4545
@@ -458,6 +458,7 @@ services:
       KONGA_LOG_LEVEL: info
       NO_AUTH: "true"
       KONGA_SEED_KONG_NODE_DATA_SOURCE_FILE: /konga.js
+      BASE_URL: env2.dojot.com.br
       NODE_ENV: production
     volumes:
       - ./kong/konga.config.js:/konga.js:ro
