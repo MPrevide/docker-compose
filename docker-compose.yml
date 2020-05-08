@@ -278,9 +278,10 @@ services:
       KONG_PG_USER: kong
       KONG_PG_DATABASE: kong
       KONG_PG_PASSWORD: kong
-      KONG_LOG_LEVEL: info
+      KONG_LOG_LEVEL: debug
     ports:
       - "8000:8000/tcp"
+      - "8443:8443/tcp"
     healthcheck:
       test: ["CMD", "kong", "health"]
       interval: 10s
@@ -435,6 +436,10 @@ services:
   ws:
     image: ws:test
     restart: always
+    ports:
+      - 4545:4545
+      - 4546:4546
+
 
 # GUI to Kong Admin API - BEGIN
 #
