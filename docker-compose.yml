@@ -283,7 +283,7 @@ services:
       KONG_SSL_CERT_KEY: /certs/example.key
       # To enable HTTPs, it is necessary to configure public certificates
       # issued by a public CA, such as lets encrypt, for external communication
-      # and a public certificate issued by dojot's EJBCA for external communication
+      # and a public certificate issued by dojot's EJBCA for internal communication
       # (all these certificates must be concatenated as in the
       # kong/certificates/example.crt) and defined in KONG_SSL_CERT.
       # All of these certificates must have the Subject Alternative Name
@@ -294,7 +294,7 @@ services:
       KONG_SSL_CERT: /certs/example.crt
     ports:
       - "8000:8000/tcp"
-      # Proxy listen to HTTPS traffic (8443)
+      # Proxy listen to HTTPS traffic (8443). services and routes must be configured to use the https protocol
       - "8443:8443/tcp"
     healthcheck:
       test: ["CMD", "kong", "health"]
