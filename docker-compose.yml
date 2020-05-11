@@ -116,59 +116,59 @@ services:
 ################
 # iot-agent lwm2m
 ################
-  iotagent-lwm2m:
-    image: dojot/iotagent-leshan:development
-    depends_on:
-      - kafka
-      - data-broker
-      - auth
-      - image-manager
-    environment:
-      DOJOT_MANAGEMENT_USER: 'iotagent-lwm2m'
-      KAFKA_GROUP_ID: "iotagent-lwm2m-group"
-      # The FILE_SERVER_ADDRESS should be filled with an address accesible to the devices that want to update the firmware
-      FILE_SERVER_ADDRESS: 127.0.0.1
-    ports:
-      - 5683:5683/udp # configuration coap port
-      - 5684:5684/udp # configuration dtls port
-      - 5693:5693/udp # file server coap port
-      - 5694:5694/udp # file server dtls port
-    restart: always
-    logging:
-      driver: json-file
-      options:
-        max-size: 100m
+  # iotagent-lwm2m:
+  #   image: dojot/iotagent-leshan:development
+  #   depends_on:
+  #     - kafka
+  #     - data-broker
+  #     - auth
+  #     - image-manager
+  #   environment:
+  #     DOJOT_MANAGEMENT_USER: 'iotagent-lwm2m'
+  #     KAFKA_GROUP_ID: "iotagent-lwm2m-group"
+  #     # The FILE_SERVER_ADDRESS should be filled with an address accesible to the devices that want to update the firmware
+  #     FILE_SERVER_ADDRESS: 127.0.0.1
+  #   ports:
+  #     - 5683:5683/udp # configuration coap port
+  #     - 5684:5684/udp # configuration dtls port
+  #     - 5693:5693/udp # file server coap port
+  #     - 5694:5694/udp # file server dtls port
+  #   restart: always
+  #   logging:
+  #     driver: json-file
+  #     options:
+  #       max-size: 100m
 
-  image-manager:
-    image: dojot/image-manager:development
-    restart: always
-    depends_on:
-      - postgres
-      - minio
-    logging:
-      driver: json-file
-      options:
-        max-size: 100m
-    environment:
-      # TODO: The following should be unique for each environment
-      S3ACCESSKEY: 9HEODSF6WQN5EZ39DM7Z
-      S3SECRETKEY: fT5nAgHR9pkj0yYsBdc4p+PPq6ArjshcPdz0HA6W
-      DBHOST: postgres
-      DBUSER: imgm
-      DBPASS: imgm
+  # image-manager:
+  #   image: dojot/image-manager:development
+  #   restart: always
+  #   depends_on:
+  #     - postgres
+  #     - minio
+  #   logging:
+  #     driver: json-file
+  #     options:
+  #       max-size: 100m
+  #   environment:
+  #     # TODO: The following should be unique for each environment
+  #     S3ACCESSKEY: 9HEODSF6WQN5EZ39DM7Z
+  #     S3SECRETKEY: fT5nAgHR9pkj0yYsBdc4p+PPq6ArjshcPdz0HA6W
+  #     DBHOST: postgres
+  #     DBUSER: imgm
+  #     DBPASS: imgm
 
-  minio:
-    image: dojot/minio:2019.09.20
-    restart: always
-    logging:
-      driver: json-file
-      options:
-        max-size: 100m
-    environment:
-      # TODO: The following should be unique for each environment
-      MINIO_ACCESS_KEY: 9HEODSF6WQN5EZ39DM7Z
-      MINIO_SECRET_KEY: fT5nAgHR9pkj0yYsBdc4p+PPq6ArjshcPdz0HA6W
-    command: server /data
+  # minio:
+  #   image: dojot/minio:2019.09.20
+  #   restart: always
+  #   logging:
+  #     driver: json-file
+  #     options:
+  #       max-size: 100m
+  #   environment:
+  #     # TODO: The following should be unique for each environment
+  #     MINIO_ACCESS_KEY: 9HEODSF6WQN5EZ39DM7Z
+  #     MINIO_SECRET_KEY: fT5nAgHR9pkj0yYsBdc4p+PPq6ArjshcPdz0HA6W
+  #   command: server /data
 
   device-manager:
     image: dojot/device-manager:development
@@ -224,7 +224,7 @@ services:
 
   # Prepare database, Bootstrap the database
   kong-migrations:
-    image: dojot/kong:development
+    image: mprevide/kong:test
     command: kong migrations bootstrap
     depends_on:
       postgres:
@@ -244,7 +244,7 @@ services:
 
   # Run any new migrations and Finish running any pending migrations after 'up'.
   kong-migrations-up:
-    image:  dojot/kong:development
+    image:  mprevide/kong:test
     command: kong migrations up && kong migrations finish
     depends_on:
       postgres:
@@ -263,7 +263,7 @@ services:
         max-size: 100m
 
   apigw:
-    image: dojot/kong:development
+    image: mprevide/kong:test
     user: "kong"
     depends_on:
       postgres:
@@ -429,12 +429,12 @@ services:
       options:
         max-size: 100m
 
-  data-manager:
-    image: dojot/data-manager:development
-    restart: always
-    depends_on:
-      - flowbroker
-      - device-manager
+  # data-manager:
+  #   image: dojot/data-manager:development
+  #   restart: always
+  #   depends_on:
+  #     - flowbroker
+  #     - device-manager
 
   backstage:
     image: dojot/backstage:development
@@ -442,41 +442,48 @@ services:
     depends_on:
       - postgres
 
-  cron:
-    image: dojot/cron:development
-    depends_on:
-      - kafka
-      - data-broker
-      - auth
-      - mongodb
+  # cron:
+  #   image: dojot/cron:development
+  #   depends_on:
+  #     - kafka
+  #     - data-broker
+  #     - auth
+  #     - mongodb
+  #   restart: always
+
+  ws:
+    image: mprevide/ws:test
     restart: always
+    ports:
+      - 4545:4545
+      - 4546:4546
 
 # GUI to Kong Admin API - BEGIN
 # Konga GUI will be available at http://localhost:1337
 #
-# konga:
-#   image: dojot/pantsel_konga:0.14.7
-#   depends_on:
-#     - apigw
-#     - mongodb
-#   ports:
-#     - 1337:1337
-#   environment:
-#     DB_ADAPTER: mongo
-#     DB_DATABASE: konga
-#     DB_HOST: mongodb
-#     KONGA_LOG_LEVEL: info
-#     NO_AUTH: "true"
-#     KONGA_SEED_KONG_NODE_DATA_SOURCE_FILE: /konga.js
-#     NODE_ENV: production
-#     BASE_URL: localhost
-#   volumes:
-#     - ./kong/konga.config.js:/konga.js:ro
-#   restart: on-failure
-#   logging:
-#     driver: json-file
-#     options:
-#       max-size: 100m
+konga:
+  image: dojot/pantsel_konga:0.14.7
+  depends_on:
+    - apigw
+    - mongodb
+  ports:
+    - 1337:1337
+  environment:
+    DB_ADAPTER: mongo
+    DB_DATABASE: konga
+    DB_HOST: mongodb
+    KONGA_LOG_LEVEL: info
+    NO_AUTH: "true"
+    KONGA_SEED_KONG_NODE_DATA_SOURCE_FILE: /konga.js
+    NODE_ENV: production
+    BASE_URL: localhost
+  volumes:
+    - ./kong/konga.config.js:/konga.js:ro
+  restart: on-failure
+  logging:
+    driver: json-file
+    options:
+      max-size: 100m
 #
 # GUI to Kong Admin API - END
 
