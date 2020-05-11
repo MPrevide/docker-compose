@@ -279,6 +279,8 @@ services:
       KONG_PG_DATABASE: kong
       KONG_PG_PASSWORD: kong
       KONG_LOG_LEVEL: debug
+      KONG_SSL_CERT: /certs/public-kong.crt
+      KONG_SSL_CERT_KEY: /certs/kong2.key
     ports:
       - "8000:8000/tcp"
       - "8443:8443/tcp"
@@ -288,6 +290,8 @@ services:
       timeout: 10s
       retries: 10
     restart: on-failure
+    volumes:
+      - ./kong/certificates/:/certs/:Z
     logging:
       driver: json-file
       options:
