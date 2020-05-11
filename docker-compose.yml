@@ -290,7 +290,7 @@ services:
       # with at least one DNS setting with an external domain.
       #
       # It is also possible to configure KONG_SSL_CERT_KEY and KONG_SSL_CERT through the kong Admin-API,
-      # in the endpoint certificates it is important to configure the SNI.
+      # in the endpoint certificates in this case is important to configure the SNI.
       KONG_SSL_CERT: /certs/example.crt
     ports:
       - "8000:8000/tcp"
