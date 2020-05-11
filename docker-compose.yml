@@ -279,10 +279,22 @@ services:
       KONG_PG_DATABASE: kong
       KONG_PG_PASSWORD: kong
       KONG_LOG_LEVEL: debug
-      KONG_SSL_CERT: /certs/public-kong.crt
-      KONG_SSL_CERT_KEY: /certs/kong2.key
+      # Private key, must be used to generate all certificates defined in KONG_SSL_CERT.
+      KONG_SSL_CERT_KEY: /certs/example.key
+      # To enable HTTPs, it is necessary to configure public certificates
+      # issued by a public CA, such as lets encrypt, for external communication
+      # and a public certificate issued by dojot's EJBCA for external communication
+      # (all these certificates must be concatenated as in the
+      # kong/certificates/example.crt) and defined in KONG_SSL_CERT.
+      # All of these certificates must have the Subject Alternative Name
+      # with at least one DNS setting with an external domain.
+      #
+      # It is also possible to configure KONG_SSL_CERT_KEY and KONG_SSL_CERT through the kong Admin-API,
+      # in the endpoint certificates it is important to configure the SNI.
+      KONG_SSL_CERT: /certs/example.crt
     ports:
       - "8000:8000/tcp"
+      # Proxy listen to HTTPS traffic (8443)
       - "8443:8443/tcp"
     healthcheck:
       test: ["CMD", "kong", "health"]
@@ -291,6 +303,7 @@ services:
       retries: 10
     restart: on-failure
     volumes:
+      # Exposes certificates
       - ./kong/certificates/:/certs/:Z
     logging:
       driver: json-file
