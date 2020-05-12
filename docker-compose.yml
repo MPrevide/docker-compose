@@ -281,8 +281,10 @@ services:
       KONG_LOG_LEVEL: debug
       KONG_SSL_CERT_KEY: /certs/example.key
       KONG_SSL_CERT: /certs/example-lets.crt
-      KONG_NGINX_PROXY_SSL_CERTIFICATE: /certs/example-internal.crt
-      KONG_NGINX_PROXY_SSL_CERTIFICATE_KEY: /certs/example.key
+      # KONG_NGINX_PROXY_SSL_CERTIFICATE: /certs/example-internal.crt
+      # KONG_NGINX_PROXY_SSL_CERTIFICATE_KEY: /certs/example.key
+      KONG_NGINX_PROXY_PROXY_SSL_CERTIFICATE: /certs/example-internal.crt
+      KONG_NGINX_PROXY_PROXY_SSL_CERTIFICATE_KEY: /certs/example.key
       KONG_NGINX_PROXY_PROXY_SSL_TRUSTED_CERTIFICATE: /certs/root_interna_format.crt
       KONG_NGINX_PROXY_PROXY_SSL_VERIFY: "on"
       KONG_NGINX_PROXY_SSL_VERIFY_DEPTH: "2"
