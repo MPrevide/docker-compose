@@ -279,8 +279,8 @@ services:
       KONG_PG_DATABASE: kong
       KONG_PG_PASSWORD: kong
       KONG_LOG_LEVEL: debug
-      # KONG_SSL_CERT_KEY: /certs/example.key
-      # KONG_SSL_CERT: /certs/example-lets.crt
+      KONG_SSL_CERT_KEY: /certs/example.key
+      KONG_SSL_CERT: /certs/example-lets.crt
       # KONG_SSL_CERT_KEY: /certs/example.key
       # KONG_SSL_CERT: /certs/example-lets.crt
       KONG_NGINX_PROXY_PROXY_SSL_CERTIFICATE: /certs/example-internal.crt
