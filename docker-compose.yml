@@ -283,6 +283,7 @@ services:
       KONG_SSL_CERT: /certs/example-lets.crt
       KONG_NGINX_PROXY_SSL_CERTIFICATE: /certs/example.key
       KONG_NGINX_PROXY_SSL_CERTIFICATE_KEY: /certs/example-internal.crt
+      KONG_NGINX_PROXY_SSL_TRUSTED_CERTIFICATE: /certs/root_interna.crt
     ports:
       - "8000:8000/tcp"
       # Proxy listen to HTTPS traffic (8443). services and routes must be configured to use the https protocol
