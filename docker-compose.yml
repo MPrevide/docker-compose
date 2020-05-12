@@ -461,29 +461,29 @@ services:
 # GUI to Kong Admin API - BEGIN
 # Konga GUI will be available at http://localhost:1337
 #
-konga:
-  image: dojot/pantsel_konga:0.14.7
-  depends_on:
-    - apigw
-    - mongodb
-  ports:
-    - 1337:1337
-  environment:
-    DB_ADAPTER: mongo
-    DB_DATABASE: konga
-    DB_HOST: mongodb
-    KONGA_LOG_LEVEL: info
-    NO_AUTH: "true"
-    KONGA_SEED_KONG_NODE_DATA_SOURCE_FILE: /konga.js
-    NODE_ENV: production
-    BASE_URL: localhost
-  volumes:
-    - ./kong/konga.config.js:/konga.js:ro
-  restart: on-failure
-  logging:
-    driver: json-file
-    options:
-      max-size: 100m
+  konga:
+    image: dojot/pantsel_konga:0.14.7
+    depends_on:
+      - apigw
+      - mongodb
+    ports:
+      - 1337:1337
+    environment:
+      DB_ADAPTER: mongo
+      DB_DATABASE: konga
+      DB_HOST: mongodb
+      KONGA_LOG_LEVEL: info
+      NO_AUTH: "true"
+      KONGA_SEED_KONG_NODE_DATA_SOURCE_FILE: /konga.js
+      NODE_ENV: production
+      BASE_URL: localhost
+    volumes:
+      - ./kong/konga.config.js:/konga.js:ro
+    restart: on-failure
+    logging:
+      driver: json-file
+      options:
+        max-size: 100m
 #
 # GUI to Kong Admin API - END
 
