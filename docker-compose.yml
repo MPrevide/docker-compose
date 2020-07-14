@@ -55,7 +55,6 @@ services:
       - kafka
       - data-broker
       - auth
-      - ejbca
     ports:
       - 1883:1883
       - 8883:8883
