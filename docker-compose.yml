@@ -1,6 +1,46 @@
 version: '3.8'
 services:
 
+  # influxdb-retriever:
+  #   image: mprevide/retriever:test
+  #   depends_on:
+  #     - influxdb
+  #   environment:
+  #     RETRIEVER_LOG_CONSOLE_LEVEL: "info"
+  #   restart: always
+  #   logging:
+  #     driver: json-file
+  #     options:
+  #       max-size: 100m
+
+  # influxdb-storer:
+  #   image: mprevide/storer:test
+  #   depends_on:
+  #     - kafka
+  #     - influxdb
+  #   environment:
+  #     STORER_LOG_CONSOLE_LEVEL: "info"
+  #   restart: always
+  #   logging:
+  #     driver: json-file
+  #     options:
+  #       max-size: 100m
+
+  # influxdb:
+  #   image: quay.io/influxdb/influxdb:v2.0.2
+  #   command: influxd --reporting-disabled
+  #   restart: always
+  #   # check if this volumes are right
+  #   volumes:
+  #     - influxdb-volume:/var/lib/influxdb
+  #     - influxdb-cfg-volume:/root/.influxdbv2
+  #   healthcheck:
+  #     test: "influx ping"
+  #   logging:
+  #     driver: json-file
+  #     options:
+  #       max-size: 100m
+
   history:
     image: dojot/history:v0.5.0-rc.2
     restart: always
@@ -627,7 +667,7 @@ services:
     logging:
       driver: json-file
       options:
-        max-size: 100m  
+        max-size: 100m
 
   backstage:
     image: dojot/backstage:v0.5.0-rc.2
@@ -637,7 +677,7 @@ services:
     logging:
       driver: json-file
       options:
-        max-size: 100m  
+        max-size: 100m
 
   cron:
     image: dojot/cron:v0.5.0-rc.2
@@ -725,6 +765,8 @@ volumes:
   device-manager-redis-volume:
   kafka-ws-redis-volume:
   mosca-redis-volume:
+  influxdb-volume:
+  influxdb-cfg-volume:
 
 networks:
   flowbroker:
