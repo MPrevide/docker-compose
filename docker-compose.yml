@@ -43,7 +43,6 @@ services:
     restart: always
     ports:
       - "8086:8086"
-    # check if this volumes are right
     volumes:
       - influxdb-volume:/var/lib/influxdb
       - influxdb-cfg-volume:/root/.influxdbv2
@@ -54,37 +53,37 @@ services:
       options:
         max-size: 100m
 
-  history:
-    image: dojot/history:v0.5.0-rc.2
-    restart: always
-    depends_on:
-      - mongodb
-    environment:
-      FALCON_SETTINGS_MODULE: 'history.settings.docker'
-      DOJOT_MANAGEMENT_USER: 'history'
-      LOG_LEVEL: INFO
-    logging:
-      driver: json-file
-      options:
-        max-size: 100m
+  # history:
+  #   image: dojot/history:v0.5.0-rc.2
+  #   restart: always
+  #   depends_on:
+  #     - mongodb
+  #   environment:
+  #     FALCON_SETTINGS_MODULE: 'history.settings.docker'
+  #     DOJOT_MANAGEMENT_USER: 'history'
+  #     LOG_LEVEL: INFO
+  #   logging:
+  #     driver: json-file
+  #     options:
+  #       max-size: 100m
 
-  persister:
-    image: dojot/persister:v0.5.0-rc.2
-    restart: always
-    depends_on:
-      - mongodb
-      - auth
-      - kafka
-      - data-broker
-    environment:
-      FALCON_SETTINGS_MODULE: 'history.settings.docker'
-      DOJOT_MANAGEMENT_USER: 'persister'
-      KAFKA_GROUP_ID: 'persister-group'
-      LOG_LEVEL: INFO
-    logging:
-      driver: json-file
-      options:
-        max-size: 100m
+  # persister:
+  #   image: dojot/persister:v0.5.0-rc.2
+  #   restart: always
+  #   depends_on:
+  #     - mongodb
+  #     - auth
+  #     - kafka
+  #     - data-broker
+  #   environment:
+  #     FALCON_SETTINGS_MODULE: 'history.settings.docker'
+  #     DOJOT_MANAGEMENT_USER: 'persister'
+  #     KAFKA_GROUP_ID: 'persister-group'
+  #     LOG_LEVEL: INFO
+  #   logging:
+  #     driver: json-file
+  #     options:
+  #       max-size: 100m
 
   mongodb:
     image: dojot/mongo:3.2
