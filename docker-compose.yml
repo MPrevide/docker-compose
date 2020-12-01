@@ -1,45 +1,58 @@
 version: '3.8'
 services:
 
-  # influxdb-retriever:
-  #   image: mprevide/retriever:test
-  #   depends_on:
-  #     - influxdb
-  #   environment:
-  #     RETRIEVER_LOG_CONSOLE_LEVEL: "info"
-  #   restart: always
-  #   logging:
-  #     driver: json-file
-  #     options:
-  #       max-size: 100m
+  influxdb-retriever:
+    image: mprevide/influxdb-retriever:influxdb
+    depends_on:
+      - influxdb
+    environment:
+      RETRIEVER_LOG_CONSOLE_LEVEL: "debug"
+    restart: always
+    logging:
+      driver: json-file
+      options:
+        max-size: 100m
 
-  # influxdb-storer:
-  #   image: mprevide/storer:test
-  #   depends_on:
-  #     - kafka
-  #     - influxdb
-  #   environment:
-  #     STORER_LOG_CONSOLE_LEVEL: "info"
-  #   restart: always
-  #   logging:
-  #     driver: json-file
-  #     options:
-  #       max-size: 100m
+  influxdb-storer:
+    image: mprevide/storer:test
+    depends_on:
+      - kafka
+      - influxdb
+    environment:
+      STORER_LOG_CONSOLE_LEVEL: "debug"
+    restart: always
+    logging:
+      driver: json-file
+      options:
+        max-size: 100m
 
-  # influxdb:
-  #   image: quay.io/influxdb/influxdb:v2.0.2
-  #   command: influxd --reporting-disabled
-  #   restart: always
-  #   # check if this volumes are right
-  #   volumes:
-  #     - influxdb-volume:/var/lib/influxdb
-  #     - influxdb-cfg-volume:/root/.influxdbv2
-  #   healthcheck:
-  #     test: "influx ping"
-  #   logging:
-  #     driver: json-file
-  #     options:
-  #       max-size: 100m
+  influxdb-setup:
+    image: quay.io/influxdb/influxdb:v2.0.2
+    restart: on-failure
+    volumes:
+      - influxdb-cfg-volume:/root/.influxdbv2/
+      - ./influxdb/init-influx.sh:/init-influx.sh:Z
+    entrypoint:
+      - /init-influx.sh
+    depends_on:
+      - influxdb
+
+  influxdb:
+    image: quay.io/influxdb/influxdb:v2.0.2
+    command: influxd --reporting-disabled
+    restart: always
+    ports:
+      - "8086:8086"
+    # check if this volumes are right
+    volumes:
+      - influxdb-volume:/var/lib/influxdb
+      - influxdb-cfg-volume:/root/.influxdbv2
+    healthcheck:
+      test: "influx ping"
+    logging:
+      driver: json-file
+      options:
+        max-size: 100m
 
   history:
     image: dojot/history:v0.5.0-rc.2
@@ -717,29 +730,29 @@ services:
 # GUI to Kong Admin API - BEGIN
 # Konga GUI will be available at http://localhost:1337
 #
-# konga:
-#   image: dojot/pantsel_konga:0.14.7
-#   depends_on:
-#     - apigw
-#     - mongodb
-#   ports:
-#     - 1337:1337
-#   environment:
-#     DB_ADAPTER: mongo
-#     DB_DATABASE: konga
-#     DB_HOST: mongodb
-#     KONGA_LOG_LEVEL: info
-#     NO_AUTH: "true"
-#     KONGA_SEED_KONG_NODE_DATA_SOURCE_FILE: /konga.js
-#     NODE_ENV: production
-#     BASE_URL: localhost
-#   volumes:
-#     - ./kong/konga.config.js:/konga.js:ro
-#   restart: on-failure
-#   logging:
-#     driver: json-file
-#     options:
-#       max-size: 100m
+  konga:
+    image: dojot/pantsel_konga:0.14.7
+    depends_on:
+      - apigw
+      - mongodb
+    ports:
+      - 1337:1337
+    environment:
+      DB_ADAPTER: mongo
+      DB_DATABASE: konga
+      DB_HOST: mongodb
+      KONGA_LOG_LEVEL: info
+      NO_AUTH: "true"
+      KONGA_SEED_KONG_NODE_DATA_SOURCE_FILE: /konga.js
+      NODE_ENV: production
+      BASE_URL: localhost
+    volumes:
+      - ./kong/konga.config.js:/konga.js:ro
+    restart: on-failure
+    logging:
+      driver: json-file
+      options:
+        max-size: 100m
 #
 # GUI to Kong Admin API - END
 
