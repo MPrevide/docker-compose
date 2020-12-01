@@ -14,7 +14,7 @@ services:
         max-size: 100m
 
   influxdb-storer:
-    image: mprevide/storer:test
+    image: mprevide/influxdb-storer:influxdb
     depends_on:
       - kafka
       - influxdb
